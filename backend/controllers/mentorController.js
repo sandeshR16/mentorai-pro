@@ -19,20 +19,20 @@ Provide:
 3. Recommended Skills
 `;
 
-    const apiKey = process.env.TOGETHER_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
 
-    // Local Mock Fallback if key is missing or is the default placeholder
-    if (!apiKey || apiKey.includes("your_together_api_key")) {
-      console.log("Together API key not set. Using local mock response fallback.");
+    // Local Mock Fallback if key is missing or is placeholder
+    if (!apiKey || apiKey === "your_groq_api_key_here") {
+      console.log("Groq API key not set. Using local mock response fallback.");
       const reply = getMockMentorReply(message);
       return res.json({ reply });
     }
 
     try {
       const response = await axios.post(
-        "https://api.together.xyz/v1/chat/completions",
+        "https://api.groq.com/openai/v1/chat/completions",
         {
-          model: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+          model: "llama-3.3-70b-versatile",
           messages: [
             {
               role: "user",
@@ -44,7 +44,7 @@ Provide:
           headers: {
             Authorization: `Bearer ${apiKey}`
           },
-          timeout: 10000 // 10s timeout
+          timeout: 12000
         }
       );
 
@@ -52,7 +52,7 @@ Provide:
         reply: response.data.choices[0].message.content
       });
     } catch (apiError) {
-      console.error("Together AI API request failed, falling back to mock reply:", apiError.message);
+      console.error("Groq AI API request failed, falling back to mock reply:", apiError.message);
       const reply = getMockMentorReply(message);
       res.json({ reply });
     }

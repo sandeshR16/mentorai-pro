@@ -17,6 +17,10 @@ function SignIn() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
     setError("");
     setLoading(true);
 
@@ -29,11 +33,17 @@ function SignIn() {
     } catch (err: any) {
       console.warn("Backend auth failed or database is offline. Logging in with local mock user fallback...");
       
-      // Local Mock user bypass for easy local testing/demonstrations
+      // Calculate dynamic name based on email prefix
+      const emailPrefix = email.split("@")[0];
+      const capitalizedName = emailPrefix
+        .split(/[._-]/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
       const mockUser = {
         _id: "mock_user_123",
-        name: "Sarah Chen",
-        email: email || "sarah@college.edu",
+        name: capitalizedName || "Mock Student",
+        email: email,
         branch: "Computer Science & Engineering",
         semester: 6,
         readinessScore: 78
@@ -47,13 +57,32 @@ function SignIn() {
     }
   };
 
+  const handleSocialLogin = (provider: string) => {
+    setError("");
+    setLoading(true);
+    setTimeout(() => {
+      const mockUser = {
+        _id: `mock_user_${provider.toLowerCase()}`,
+        name: `Mock ${provider} User`,
+        email: `student.${provider.toLowerCase()}@mentorai.com`,
+        branch: "Computer Science & Engineering",
+        semester: 6,
+        readinessScore: 75
+      };
+      localStorage.setItem("token", `mock_jwt_token_${provider.toLowerCase()}`);
+      localStorage.setItem("user", JSON.stringify(mockUser));
+      setLoading(false);
+      navigate({ to: "/app/dashboard" });
+    }, 800);
+  };
+
   return (
     <AuthShell
       title="Welcome back."
       subtitle="Pick up your training where you left off."
       footer={<>New here? <Link to="/auth/sign-up" className="text-brand-primary hover:underline font-medium">Create an account</Link></>}
     >
-      <SocialButtons />
+      <SocialButtons onSelect={handleSocialLogin} />
       <Divider />
       <form onSubmit={handleLogin} className="space-y-4">
         {error && (
@@ -67,6 +96,7 @@ function SignIn() {
           placeholder="you@college.edu" 
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required={true}
         />
         <div>
           <Field 
@@ -75,6 +105,7 @@ function SignIn() {
             placeholder="••••••••" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required={true}
           />
           <Link to="/auth/forgot-password" className="text-xs text-brand-primary hover:underline mt-2 inline-block">Forgot password?</Link>
         </div>

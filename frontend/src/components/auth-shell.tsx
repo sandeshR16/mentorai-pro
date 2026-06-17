@@ -51,11 +51,16 @@ export function AuthShell({ title, subtitle, children, footer }: { title: string
   );
 }
 
-export function SocialButtons() {
+export function SocialButtons({ onSelect }: { onSelect?: (provider: string) => void }) {
   return (
     <div className="grid grid-cols-3 gap-3 mb-6">
       {["Google", "GitHub", "LinkedIn"].map((p) => (
-        <button key={p} className="glass-card rounded-lg py-2.5 text-xs font-medium text-ink-200 hover:text-white hover:border-white/15 transition-all">
+        <button
+          key={p}
+          type="button"
+          onClick={() => onSelect?.(p)}
+          className="glass-card rounded-lg py-2.5 text-xs font-medium text-ink-200 hover:text-white hover:border-white/15 transition-all cursor-pointer"
+        >
           {p}
         </button>
       ))}
@@ -73,11 +78,11 @@ export function Divider() {
   );
 }
 
-export function Field({ label, type = "text", placeholder, value, onChange }: { label: string; type?: string; placeholder?: string; value?: string; onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
+export function Field({ label, type = "text", placeholder, value, onChange, required }: { label: string; type?: string; placeholder?: string; value?: string; onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; required?: boolean }) {
   return (
     <div className="space-y-1.5">
       <label className="text-xs font-medium text-ink-300">{label}</label>
-      <input type={type} placeholder={placeholder} value={value} onChange={onChange} className="w-full glass-card rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-ink-600 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:border-brand-primary/40 transition-all" />
+      <input type={type} placeholder={placeholder} value={value} onChange={onChange} required={required} className="w-full glass-card rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-ink-600 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:border-brand-primary/40 transition-all" />
     </div>
   );
 }

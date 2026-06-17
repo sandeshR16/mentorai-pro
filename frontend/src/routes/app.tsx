@@ -1,11 +1,26 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/app-sidebar";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/app")({
   component: AppLayout,
 });
 
 function AppLayout() {
+  const navigate = useNavigate();
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  useEffect(() => {
+    if (!token) {
+      localStorage.clear();
+      navigate({ to: "/auth/sign-in" });
+    }
+  }, [token, navigate]);
+
+  if (!token) {
+    return null; // Render nothing while redirecting
+  }
+
   return (
     <div className="min-h-screen flex w-full bg-background text-foreground">
       <AppSidebar />

@@ -48,18 +48,18 @@ Evaluate and return exactly a JSON object (no markdown, no backticks, just raw J
 }
 `;
 
-    const apiKey = process.env.TOGETHER_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     let evaluationResult;
 
-    if (!apiKey || apiKey.includes("your_together_api_key")) {
-      console.log("Together API key not set. Using local mock evaluation.");
+    if (!apiKey || apiKey === "your_groq_api_key_here") {
+      console.log("Groq API key not set. Using local mock evaluation.");
       evaluationResult = getMockEvaluation(question, answer);
     } else {
       try {
         const response = await axios.post(
-          "https://api.together.xyz/v1/chat/completions",
+          "https://api.groq.com/openai/v1/chat/completions",
           {
-            model: "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
+            model: "llama-3.3-70b-versatile",
             messages: [
               {
                 role: "user",
@@ -93,7 +93,7 @@ Evaluate and return exactly a JSON object (no markdown, no backticks, just raw J
           evaluationResult = extractJsonFields(content, answer);
         }
       } catch (apiError) {
-        console.error("Together AI request failed, falling back to local evaluator:", apiError.message);
+        console.error("Groq AI request failed, falling back to local evaluator:", apiError.message);
         evaluationResult = getMockEvaluation(question, answer);
       }
     }

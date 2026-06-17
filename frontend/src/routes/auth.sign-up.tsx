@@ -21,6 +21,10 @@ function SignUp() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!firstName || !lastName || !email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
     setError("");
     setLoading(true);
 
@@ -39,11 +43,11 @@ function SignUp() {
     } catch (err: any) {
       console.warn("Backend registration failed. Signing up with local mock user fallback...");
       
-      const name = `${firstName} ${lastName}`.trim() || "Sarah Chen";
+      const name = `${firstName} ${lastName}`.trim() || "Mock Student";
       const mockUser = {
         _id: "mock_user_123",
         name,
-        email: email || "sarah@college.edu",
+        email: email,
         branch,
         semester: Number(semester),
         readinessScore: 50
@@ -57,13 +61,32 @@ function SignUp() {
     }
   };
 
+  const handleSocialLogin = (provider: string) => {
+    setError("");
+    setLoading(true);
+    setTimeout(() => {
+      const mockUser = {
+        _id: `mock_user_${provider.toLowerCase()}`,
+        name: `Mock ${provider} User`,
+        email: `student.${provider.toLowerCase()}@mentorai.com`,
+        branch: "Computer Science & Engineering",
+        semester: 6,
+        readinessScore: 75
+      };
+      localStorage.setItem("token", `mock_jwt_token_${provider.toLowerCase()}`);
+      localStorage.setItem("user", JSON.stringify(mockUser));
+      setLoading(false);
+      navigate({ to: "/app/dashboard" });
+    }, 800);
+  };
+
   return (
     <AuthShell
       title="Start your engine."
       subtitle="Free for students. No credit card required."
       footer={<>Already have an account? <Link to="/auth/sign-in" className="text-brand-primary hover:underline font-medium">Sign in</Link></>}
     >
-      <SocialButtons />
+      <SocialButtons onSelect={handleSocialLogin} />
       <Divider />
       <form onSubmit={handleRegister} className="space-y-4 max-h-[50vh] overflow-y-auto pr-1">
         {error && (
@@ -77,12 +100,14 @@ function SignUp() {
             placeholder="Sarah" 
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            required={true}
           />
           <Field 
             label="Last name" 
             placeholder="Chen" 
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            required={true}
           />
         </div>
         <Field 
@@ -91,6 +116,7 @@ function SignUp() {
           placeholder="you@college.edu" 
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required={true}
         />
         <Field 
           label="Password" 
@@ -98,6 +124,7 @@ function SignUp() {
           placeholder="At least 8 characters" 
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required={true}
         />
 
         <div className="grid grid-cols-2 gap-3">
