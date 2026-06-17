@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "gamification_demo_1",
+    "userId": "user_demo_1",
+    "xp": 185,
+    "level": 2,
+    "streak": 4,
+    "badges": [
+      "Beginner",
+      "Quiz Whiz"
+    ],
+    "createdAt": "2026-06-17T22:30:00.000Z"
+  }
+]

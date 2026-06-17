@@ -62,22 +62,7 @@ function SignUp() {
   };
 
   const handleSocialLogin = (provider: string) => {
-    setError("");
-    setLoading(true);
-    setTimeout(() => {
-      const mockUser = {
-        _id: `mock_user_${provider.toLowerCase()}`,
-        name: `Mock ${provider} User`,
-        email: `student.${provider.toLowerCase()}@mentorai.com`,
-        branch: "Computer Science & Engineering",
-        semester: 6,
-        readinessScore: 75
-      };
-      localStorage.setItem("token", `mock_jwt_token_${provider.toLowerCase()}`);
-      localStorage.setItem("user", JSON.stringify(mockUser));
-      setLoading(false);
-      navigate({ to: "/app/dashboard" });
-    }, 800);
+    window.location.href = `/auth/social-login?provider=${provider}`;
   };
 
   return (

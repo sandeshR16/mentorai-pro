@@ -1,48 +1,34 @@
-const User = require("../models/User");
-const Skill = require("../models/Skill");
+const db = require("../config/dbAdapter");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 
-// Helper to generate a mock token and user in offline mode
-const generateOfflineSession = (email) => {
-  const mockUserId = "66708dc2cb4e92bb3c8c7f99";
-  const token = jwt.sign(
-    { id: mockUserId },
+// Helper to generate a token with full user context
+const generateSessionToken = (user) => {
+  return jwt.sign(
+    { 
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      branch: user.branch,
+      semester: Number(user.semester)
+    },
     process.env.JWT_SECRET || "mentorai123",
     { expiresIn: "7d" }
   );
-  return {
-    token,
-    user: {
-      _id: mockUserId,
-      name: "Mock Student",
-      email: email || "student@mentorai.com",
-      branch: "Computer Science",
-      semester: 6,
-      readinessScore: 65
-    }
-  };
 };
 
 exports.register = async (req, res) => {
   try {
     const { name, email, password, branch, semester } = req.body;
-
-    if (mongoose.connection.readyState !== 1) {
-      console.log("Database offline. Returning mock registration session.");
-      return res.json(generateOfflineSession(email));
+    
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
     }
 
-    // Check if user already exists
-    let user = await User.findOne({ email });
+    let user = db.findOne("users", { email });
     if (user) {
-      // User exists, return login instead to allow smooth test logins
-      const token = jwt.sign(
-        { id: user._id },
-        process.env.JWT_SECRET || "mentorai123",
-        { expiresIn: "7d" }
-      );
+      // If user exists, do login instead for seamless offline testing
+      const token = generateSessionToken(user);
       return res.json({
         token,
         user: {
@@ -51,36 +37,39 @@ exports.register = async (req, res) => {
           email: user.email,
           branch: user.branch,
           semester: user.semester,
-          readinessScore: user.readinessScore
+          readinessScore: user.readinessScore || 50
         }
       });
     }
 
     const hashedPassword = await bcrypt.hash(password || "password123", 10);
-
-    user = await User.create({
-      name: name || "Student User",
+    user = db.create("users", {
+      name: name || email.split("@")[0],
       email,
       password: hashedPassword,
-      branch: branch || "Computer Science",
-      semester: semester || 6,
-      readinessScore: 50 // Default baseline score
+      branch: branch || "Computer Science & Engineering",
+      semester: Number(semester) || 6,
+      readinessScore: 50
     });
 
-    // Create default skill records
-    await Skill.create({
+    // Create default skill record
+    db.create("skills", {
       userId: user._id,
       coding: 50,
       aptitude: 50,
       communication: 50
     });
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET || "mentorai123",
-      { expiresIn: "7d" }
-    );
+    // Create default gamification record
+    db.create("gamification", {
+      userId: user._id,
+      xp: 10,
+      level: 1,
+      streak: 1,
+      badges: ["Beginner"]
+    });
 
+    const token = generateSessionToken(user);
     res.json({
       token,
       user: {
@@ -93,52 +82,48 @@ exports.register = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error("Register error:", err);
-    // Fallback to mock session if anything crashes
-    res.json(generateOfflineSession(req.body.email));
+    console.error("Local register error:", err);
+    res.status(500).json({ message: "Server error during registration fallback" });
   }
 };
 
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (mongoose.connection.readyState !== 1) {
-      console.log("Database offline. Returning mock login session.");
-      return res.json(generateOfflineSession(email));
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
     }
 
-    let user = await User.findOne({ email });
+    let user = db.findOne("users", { email });
     if (!user) {
-      // Auto-create user to ensure "wrong credentials" or any credentials log in successfully
+      // Auto-create user for seamless credentials bypass (frictionless login)
       const hashedPassword = await bcrypt.hash(password || "password123", 10);
-      user = await User.create({
-        name: email ? email.split("@")[0] : "Student User",
+      user = db.create("users", {
+        name: email.split("@")[0],
         email,
         password: hashedPassword,
-        branch: "Computer Science",
+        branch: "Computer Science & Engineering",
         semester: 6,
         readinessScore: 50
       });
-    }
 
-    // Auto-create Skill document if it is missing
-    const existingSkill = await Skill.findOne({ userId: user._id });
-    if (!existingSkill) {
-      await Skill.create({
+      db.create("skills", {
         userId: user._id,
         coding: 50,
         aptitude: 50,
         communication: 50
       });
+
+      db.create("gamification", {
+        userId: user._id,
+        xp: 10,
+        level: 1,
+        streak: 1,
+        badges: ["Beginner"]
+      });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET || "mentorai123",
-      { expiresIn: "7d" }
-    );
-
+    const token = generateSessionToken(user);
     res.json({
       token,
       user: {
@@ -147,12 +132,11 @@ exports.login = async (req, res) => {
         email: user.email,
         branch: user.branch,
         semester: user.semester,
-        readinessScore: user.readinessScore
+        readinessScore: user.readinessScore || 50
       }
     });
   } catch (err) {
-    console.error("Login error:", err);
-    // Fallback to mock session if database error occurs
-    res.json(generateOfflineSession(req.body.email));
+    console.error("Local login error:", err);
+    res.status(500).json({ message: "Server error during login" });
   }
 };

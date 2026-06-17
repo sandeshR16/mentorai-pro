@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Loader2 } from "lucide-react";
 
 export function AuthShell({ title, subtitle, children, footer }: { title: string; subtitle: string; children: ReactNode; footer: ReactNode }) {
   return (
@@ -86,3 +87,126 @@ export function Field({ label, type = "text", placeholder, value, onChange, requ
     </div>
   );
 }
+
+export function SocialAuthModal({
+  isOpen,
+  onClose,
+  provider,
+  onAuthenticate
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  provider: string;
+  onAuthenticate: (email: string, name: string) => void;
+}) {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    setTimeout(() => {
+      onAuthenticate(email, name || email.split("@")[0]);
+      setLoading(false);
+      onClose();
+    }, 1200);
+  };
+
+  const selectPredefined = (preEmail: string, preName: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      onAuthenticate(preEmail, preName);
+      setLoading(false);
+      onClose();
+    }, 1200);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="w-full max-w-sm glass-card border-white/10 rounded-2xl p-6 relative overflow-hidden shadow-2xl">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-accent animate-pulse" />
+        
+        <h3 className="font-display font-bold text-lg text-white mb-1">
+          Sign in with {provider}
+        </h3>
+        <p className="text-xs text-ink-400 mb-6">to continue to MentorAI</p>
+
+        {loading ? (
+          <div className="py-12 flex flex-col justify-center items-center gap-3">
+            <Loader2 className="w-8 h-8 text-brand-primary animate-spin" />
+            <span className="text-xs text-ink-300 font-medium font-mono">Connecting securely to {provider}...</span>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-ink-500">// Choose account</p>
+              <button
+                type="button"
+                onClick={() => selectPredefined(`student.${provider.toLowerCase()}@college.edu`, `Demo ${provider} User`)}
+                className="w-full text-left p-3 rounded-lg border border-white/5 bg-white/5 hover:bg-white/10 hover:border-white/15 transition-all flex items-center gap-3 cursor-pointer"
+              >
+                <div className="size-8 rounded-full bg-brand-primary/20 flex items-center justify-center font-bold text-xs text-brand-primary">
+                  {provider.slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-white">Demo {provider} User</p>
+                  <p className="text-[10px] text-ink-500">student.${provider.toLowerCase()}@college.edu</p>
+                </div>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-px bg-white/5" />
+              <span className="text-[9px] font-mono text-ink-500 uppercase tracking-widest">or add account</span>
+              <div className="flex-1 h-px bg-white/5" />
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <div>
+                <label className="text-[10px] font-mono uppercase tracking-widest text-ink-500 block mb-1">Email address</label>
+                <input
+                  type="email"
+                  placeholder={`you@${provider.toLowerCase()}.com`}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder:text-ink-600 focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-mono uppercase tracking-widest text-ink-500 block mb-1">Full name (optional)</label>
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder:text-ink-600 focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                />
+              </div>
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-1 py-2 rounded-lg border border-white/10 text-xs font-semibold text-ink-300 hover:text-white hover:bg-white/5 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2 rounded-lg bg-brand-primary text-white text-xs font-semibold hover:bg-brand-primary-soft cursor-pointer"
+                >
+                  Continue
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+

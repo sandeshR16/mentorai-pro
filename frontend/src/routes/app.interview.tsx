@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppTopbar } from "@/components/app-topbar";
 import { useState } from "react";
-import { Mic, Play, Clock, Building2, Briefcase, Users, ArrowRight, CheckCircle2, Loader2, Send } from "lucide-react";
+import { Mic, Play, Clock, Building2, Briefcase, Users, ArrowRight, CheckCircle2, Loader2, Send, Download } from "lucide-react";
 import api from "@/lib/api";
 
 export const Route = createFileRoute("/app/interview")({
@@ -326,6 +326,55 @@ function LiveScreen({
 
 function ReportScreen({ report, onRestart }: { report: EvaluationReport; onRestart: () => void }) {
   const pFeedback = report.parsedFeedback || {};
+
+  const handleExport = () => {
+    let currentUserStr = localStorage.getItem("user");
+    let studentName = "Mock Student";
+    let studentEmail = "student@mentorai.com";
+    if (currentUserStr) {
+      try {
+        const u = JSON.parse(currentUserStr);
+        studentName = u.name || studentName;
+        studentEmail = u.email || studentEmail;
+      } catch (e) {}
+    }
+
+    let content = `MENTORAI AI MOCK INTERVIEW EVALUATION REPORT\n`;
+    content += `Generated on: ${new Date().toLocaleString()}\n`;
+    content += `Candidate Name: ${studentName}\n`;
+    content += `Candidate Email: ${studentEmail}\n`;
+    content += `=====================================================\n\n`;
+    content += `Overall Evaluation Score: ${report.score * 10} / 100\n\n`;
+    
+    content += `INTERVIEW QUESTION:\n`;
+    content += `-------------------\n`;
+    content += `"${report.question}"\n\n`;
+    
+    content += `YOUR SUBMISSION:\n`;
+    content += `----------------\n`;
+    content += `"${report.answer}"\n\n`;
+    
+    content += `AI EXAMINER EVALUATION DETAILS:\n`;
+    content += `--------------------------------\n`;
+    content += `Strengths:\n`;
+    content += `${pFeedback.strengths || "Functional response structure."}\n\n`;
+    content += `Weaknesses / Areas of Gaps:\n`;
+    content += `${pFeedback.weaknesses || "Could explore more technical details."}\n\n`;
+    content += `Actionable Improvement Tips:\n`;
+    content += `${pFeedback.improvementTips || "Practice more mock interview sessions."}\n\n`;
+    content += `=====================================================\n`;
+    
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `MentorAI_Interview_Evaluation_Report_${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6 animate-fade-up">
       <div className="glass-card rounded-2xl p-8 relative overflow-hidden">
@@ -373,6 +422,10 @@ function ReportScreen({ report, onRestart }: { report: EvaluationReport; onResta
           
           <button onClick={onRestart} className="w-full px-5 py-3 bg-brand-primary text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-brand-primary-soft transition-colors cursor-pointer">
             Start Another Simulation <ArrowRight className="size-4" />
+          </button>
+          
+          <button onClick={handleExport} className="w-full px-5 py-3 glass-card border border-white/10 hover:border-white/20 text-white font-semibold rounded-lg flex items-center justify-center gap-2 hover:bg-white/5 transition-colors cursor-pointer">
+            <Download className="size-4" /> Export Report
           </button>
         </div>
       </div>

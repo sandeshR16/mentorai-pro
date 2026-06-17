@@ -98,24 +98,28 @@ Evaluate and return exactly a JSON object (no markdown, no backticks, just raw J
       }
     }
 
-    // Save to database
+    // Save to Local Database
+    const db = require("../config/dbAdapter");
     let interview;
-    const interviewData = {
-      userId: req.user?.id || "66708dc2cb4e92bb3c8c7f99",
-      type,
-      question,
-      answer,
-      feedback: JSON.stringify(evaluationResult),
-      score: evaluationResult.score || 7
-    };
-
-    if (mongoose.connection.readyState === 1) {
-      interview = await MockInterview.create(interviewData);
-    } else {
-      console.log("Database offline. Generating mock interview response.");
+    try {
+      interview = db.create("interviews", {
+        userId: req.user?.id || "66708dc2cb4e92bb3c8c7f99",
+        type: type || "TECHNICAL",
+        question,
+        answer,
+        score: evaluationResult.score || 7,
+        feedback: JSON.stringify(evaluationResult)
+      });
+    } catch (dbErr) {
+      console.warn("Local database insert failed, falling back to mock interview response:", dbErr.message);
       interview = {
-        _id: "66708dc2cb4e92bb3c8c7f" + Math.floor(Math.random() * 100),
-        ...interviewData,
+        _id: "mock_interview_" + Date.now(),
+        userId: req.user?.id || "66708dc2cb4e92bb3c8c7f99",
+        type,
+        question,
+        answer,
+        feedback: JSON.stringify(evaluationResult),
+        score: evaluationResult.score || 7,
         createdAt: new Date()
       };
     }

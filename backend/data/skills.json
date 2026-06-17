@@ -1,0 +1,10 @@
+[
+  {
+    "_id": "skills_demo_1",
+    "userId": "user_demo_1",
+    "coding": 78,
+    "aptitude": 72,
+    "communication": 75,
+    "createdAt": "2026-06-17T22:30:00.000Z"
+  }
+]

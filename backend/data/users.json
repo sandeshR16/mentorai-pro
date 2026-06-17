@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "user_demo_1",
+    "name": "Jane Doe",
+    "email": "jane.doe@college.edu",
+    "password": "$2a$10$tM2xK5a6B6Jq7P1yP2sPJeJ7uGvGvGvGvGvGvGvGvGvGvGvGvGvG.",
+    "branch": "Computer Science & Engineering",
+    "semester": 6,
+    "readinessScore": 75,
+    "createdAt": "2026-06-17T22:30:00.000Z"
+  }
+]

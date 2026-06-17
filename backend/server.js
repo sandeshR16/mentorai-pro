@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
@@ -11,8 +10,8 @@ const skillGapRoutes = require("./routes/skillGapRoutes");
 const placementRoutes = require("./routes/placementRoutes");
 const gamificationRoutes = require("./routes/gamificationRoutes");
 
-// Initialize Database connection
-connectDB();
+// Initialize Local JSON Database connection
+require("./config/localDb");
 
 const app = express();
 

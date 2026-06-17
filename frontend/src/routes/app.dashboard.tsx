@@ -73,9 +73,24 @@ function Dashboard() {
 
   const fetchDashboardMetrics = async () => {
     try {
-      // 1. Profile, skills, and past mock logs
       const profileRes = await api.get("/profile/me");
-      setUser(profileRes.data.user);
+      let fetchedUser = profileRes.data.user;
+      const localUserStr = localStorage.getItem("user");
+      if (localUserStr) {
+        try {
+          const localUserObj = JSON.parse(localUserStr);
+          if (localUserObj && localUserObj.name && localUserObj.name !== "Mock Student") {
+            fetchedUser = {
+              ...fetchedUser,
+              name: localUserObj.name,
+              email: localUserObj.email || fetchedUser.email,
+              branch: localUserObj.branch || fetchedUser.branch,
+              semester: localUserObj.semester || fetchedUser.semester
+            };
+          }
+        } catch (e) {}
+      }
+      setUser(fetchedUser);
       setInterviews(profileRes.data.interviews || []);
       if (profileRes.data.skills) {
         setSkills(profileRes.data.skills);

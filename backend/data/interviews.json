@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "interview_demo_1",
+    "userId": "user_demo_1",
+    "type": "TECHNICAL",
+    "question": "What is lexical scoping in JavaScript?",
+    "answer": "Lexical scoping defines how variable names are resolved in nested functions based on where the functions were declared.",
+    "score": 8,
+    "feedback": "{\"score\":8,\"strengths\":\"Direct definition and accurate lexical environment reference.\",\"weaknesses\":\"Could offer a code-snippet structure representation.\",\"improvementTips\":\"Practice scoping nested declarations.\"}",
+    "createdAt": "2026-06-17T22:35:00.000Z"
+  }
+]

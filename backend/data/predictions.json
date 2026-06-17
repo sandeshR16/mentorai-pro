@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "azn6uhjk0",
+    "userId": "66708dc2cb4e92bb3c8c7f99",
+    "cgpa": 7.5,
+    "readinessScore": 68,
+    "companies": {
+      "tcs": 73,
+      "infosys": 68,
+      "wipro": 65,
+      "accenture": 70
+    },
+    "createdAt": "2026-06-17T17:25:34.938Z"
+  }
+]

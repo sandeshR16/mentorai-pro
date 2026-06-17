@@ -26,6 +26,11 @@ const navItems = [
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/auth/sign-in";
+  };
+
   return (
     <aside className="hidden lg:flex w-64 shrink-0 border-r border-border bg-sidebar/60 backdrop-blur-xl flex-col">
       <Link to="/" className="p-6 flex items-center gap-3 group">
@@ -74,11 +79,11 @@ export function AppSidebar() {
           <p className="mt-2 text-sm font-display font-bold text-white">78% <span className="text-xs font-normal text-ink-500">Tier-1 Ready</span></p>
         </div>
         <div className="flex items-center gap-2 px-2">
-          <button className="flex-1 flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-ink-400 hover:text-white hover:bg-white/5 transition-colors">
+          <button className="flex-1 flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-ink-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer">
             <Settings className="size-3.5" />
             Settings
           </button>
-          <button className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-ink-400 hover:text-white hover:bg-white/5 transition-colors">
+          <button onClick={handleLogout} className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-ink-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer">
             <LogOut className="size-3.5" />
           </button>
         </div>
