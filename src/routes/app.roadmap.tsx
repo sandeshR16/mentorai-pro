@@ -3,7 +3,7 @@ import { AppTopbar } from "@/components/app-topbar";
 import { roadmap } from "@/lib/mock-data";
 import { CheckCircle2, Circle, Loader2, Award, Target } from "lucide-react";
 
-export const Route = createFileRoute("/_app/roadmap")({
+export const Route = createFileRoute("/app/roadmap")({
   head: () => ({ meta: [{ title: "Career Roadmap — MentorAI" }] }),
   component: Roadmap,
 });

@@ -4,7 +4,7 @@ import { collegeMetrics, placementTrend } from "@/lib/mock-data";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell, Legend } from "recharts";
 import { TrendingUp, Users, GraduationCap, Building2, ArrowUpRight, Download } from "lucide-react";
 
-export const Route = createFileRoute("/_app/admin")({
+export const Route = createFileRoute("/app/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — MentorAI" }] }),
   component: Admin,
 });

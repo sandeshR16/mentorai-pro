@@ -7,7 +7,7 @@ import {
 import { weeklyActivity, skillRadarData, learningPaths, recentActivities, upcomingSessions } from "@/lib/mock-data";
 import { Flame, TrendingUp, Calendar, ArrowRight, Award, BookOpen, Mic, Target } from "lucide-react";
 
-export const Route = createFileRoute("/_app/dashboard")({
+export const Route = createFileRoute("/app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — MentorAI" }] }),
   component: Dashboard,
 });

@@ -9,22 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignUpRouteImport } from './routes/auth.sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth.sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
-import { Route as AppSkillsRouteImport } from './routes/_app.skills'
-import { Route as AppRoadmapRouteImport } from './routes/_app.roadmap'
-import { Route as AppReadinessRouteImport } from './routes/_app.readiness'
-import { Route as AppMentorRouteImport } from './routes/_app.mentor'
-import { Route as AppInterviewRouteImport } from './routes/_app.interview'
-import { Route as AppGamificationRouteImport } from './routes/_app.gamification'
-import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
-import { Route as AppAdminRouteImport } from './routes/_app.admin'
+import { Route as AppSkillsRouteImport } from './routes/app.skills'
+import { Route as AppRoadmapRouteImport } from './routes/app.roadmap'
+import { Route as AppReadinessRouteImport } from './routes/app.readiness'
+import { Route as AppMentorRouteImport } from './routes/app.mentor'
+import { Route as AppInterviewRouteImport } from './routes/app.interview'
+import { Route as AppGamificationRouteImport } from './routes/app.gamification'
+import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
+import { Route as AppAdminRouteImport } from './routes/app.admin'
 
 const AppRoute = AppRouteImport.update({
-  id: '/_app',
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -90,28 +91,30 @@ const AppAdminRoute = AppAdminRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AppAdminRoute
-  '/dashboard': typeof AppDashboardRoute
-  '/gamification': typeof AppGamificationRoute
-  '/interview': typeof AppInterviewRoute
-  '/mentor': typeof AppMentorRoute
-  '/readiness': typeof AppReadinessRoute
-  '/roadmap': typeof AppRoadmapRoute
-  '/skills': typeof AppSkillsRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/admin': typeof AppAdminRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/gamification': typeof AppGamificationRoute
+  '/app/interview': typeof AppInterviewRoute
+  '/app/mentor': typeof AppMentorRoute
+  '/app/readiness': typeof AppReadinessRoute
+  '/app/roadmap': typeof AppRoadmapRoute
+  '/app/skills': typeof AppSkillsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AppAdminRoute
-  '/dashboard': typeof AppDashboardRoute
-  '/gamification': typeof AppGamificationRoute
-  '/interview': typeof AppInterviewRoute
-  '/mentor': typeof AppMentorRoute
-  '/readiness': typeof AppReadinessRoute
-  '/roadmap': typeof AppRoadmapRoute
-  '/skills': typeof AppSkillsRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/admin': typeof AppAdminRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/gamification': typeof AppGamificationRoute
+  '/app/interview': typeof AppInterviewRoute
+  '/app/mentor': typeof AppMentorRoute
+  '/app/readiness': typeof AppReadinessRoute
+  '/app/roadmap': typeof AppRoadmapRoute
+  '/app/skills': typeof AppSkillsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -119,15 +122,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_app': typeof AppRouteWithChildren
-  '/_app/admin': typeof AppAdminRoute
-  '/_app/dashboard': typeof AppDashboardRoute
-  '/_app/gamification': typeof AppGamificationRoute
-  '/_app/interview': typeof AppInterviewRoute
-  '/_app/mentor': typeof AppMentorRoute
-  '/_app/readiness': typeof AppReadinessRoute
-  '/_app/roadmap': typeof AppRoadmapRoute
-  '/_app/skills': typeof AppSkillsRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/admin': typeof AppAdminRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/gamification': typeof AppGamificationRoute
+  '/app/interview': typeof AppInterviewRoute
+  '/app/mentor': typeof AppMentorRoute
+  '/app/readiness': typeof AppReadinessRoute
+  '/app/roadmap': typeof AppRoadmapRoute
+  '/app/skills': typeof AppSkillsRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -136,43 +139,45 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
-    | '/dashboard'
-    | '/gamification'
-    | '/interview'
-    | '/mentor'
-    | '/readiness'
-    | '/roadmap'
-    | '/skills'
+    | '/app'
+    | '/app/admin'
+    | '/app/dashboard'
+    | '/app/gamification'
+    | '/app/interview'
+    | '/app/mentor'
+    | '/app/readiness'
+    | '/app/roadmap'
+    | '/app/skills'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
-    | '/dashboard'
-    | '/gamification'
-    | '/interview'
-    | '/mentor'
-    | '/readiness'
-    | '/roadmap'
-    | '/skills'
+    | '/app'
+    | '/app/admin'
+    | '/app/dashboard'
+    | '/app/gamification'
+    | '/app/interview'
+    | '/app/mentor'
+    | '/app/readiness'
+    | '/app/roadmap'
+    | '/app/skills'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
   id:
     | '__root__'
     | '/'
-    | '/_app'
-    | '/_app/admin'
-    | '/_app/dashboard'
-    | '/_app/gamification'
-    | '/_app/interview'
-    | '/_app/mentor'
-    | '/_app/readiness'
-    | '/_app/roadmap'
-    | '/_app/skills'
+    | '/app'
+    | '/app/admin'
+    | '/app/dashboard'
+    | '/app/gamification'
+    | '/app/interview'
+    | '/app/mentor'
+    | '/app/readiness'
+    | '/app/roadmap'
+    | '/app/skills'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -188,10 +193,10 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_app': {
-      id: '/_app'
-      path: ''
-      fullPath: '/'
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -223,59 +228,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app/skills': {
-      id: '/_app/skills'
+    '/app/skills': {
+      id: '/app/skills'
       path: '/skills'
-      fullPath: '/skills'
+      fullPath: '/app/skills'
       preLoaderRoute: typeof AppSkillsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/roadmap': {
-      id: '/_app/roadmap'
+    '/app/roadmap': {
+      id: '/app/roadmap'
       path: '/roadmap'
-      fullPath: '/roadmap'
+      fullPath: '/app/roadmap'
       preLoaderRoute: typeof AppRoadmapRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/readiness': {
-      id: '/_app/readiness'
+    '/app/readiness': {
+      id: '/app/readiness'
       path: '/readiness'
-      fullPath: '/readiness'
+      fullPath: '/app/readiness'
       preLoaderRoute: typeof AppReadinessRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/mentor': {
-      id: '/_app/mentor'
+    '/app/mentor': {
+      id: '/app/mentor'
       path: '/mentor'
-      fullPath: '/mentor'
+      fullPath: '/app/mentor'
       preLoaderRoute: typeof AppMentorRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/interview': {
-      id: '/_app/interview'
+    '/app/interview': {
+      id: '/app/interview'
       path: '/interview'
-      fullPath: '/interview'
+      fullPath: '/app/interview'
       preLoaderRoute: typeof AppInterviewRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/gamification': {
-      id: '/_app/gamification'
+    '/app/gamification': {
+      id: '/app/gamification'
       path: '/gamification'
-      fullPath: '/gamification'
+      fullPath: '/app/gamification'
       preLoaderRoute: typeof AppGamificationRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
+    '/app/dashboard': {
+      id: '/app/dashboard'
       path: '/dashboard'
-      fullPath: '/dashboard'
+      fullPath: '/app/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/admin': {
-      id: '/_app/admin'
+    '/app/admin': {
+      id: '/app/admin'
       path: '/admin'
-      fullPath: '/admin'
+      fullPath: '/app/admin'
       preLoaderRoute: typeof AppAdminRouteImport
       parentRoute: typeof AppRoute
     }

@@ -4,7 +4,7 @@ import { placementProbability } from "@/lib/mock-data";
 import { ResponsiveContainer, RadialBarChart, RadialBar, PolarAngleAxis, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { CheckCircle2, AlertTriangle, XCircle, Sparkles } from "lucide-react";
 
-export const Route = createFileRoute("/_app/readiness")({
+export const Route = createFileRoute("/app/readiness")({
   head: () => ({ meta: [{ title: "Placement Readiness — MentorAI" }] }),
   component: Readiness,
 });

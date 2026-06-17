@@ -4,7 +4,7 @@ import { RadarChart, PolarGrid, PolarAngleAxis, Radar as RechartsRadar, Responsi
 import { skillRadarData } from "@/lib/mock-data";
 import { TrendingUp, TrendingDown, Sparkles, ArrowUpRight } from "lucide-react";
 
-export const Route = createFileRoute("/_app/skills")({
+export const Route = createFileRoute("/app/skills")({
   head: () => ({ meta: [{ title: "Skill Gap Analysis — MentorAI" }] }),
   component: Skills,
 });

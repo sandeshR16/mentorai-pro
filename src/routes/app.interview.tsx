@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Mic, MicOff, Play, Clock, Building2, Briefcase, Users, ArrowRight, CheckCircle2 } from "lucide-react";
 import { interviewQuestions } from "@/lib/mock-data";
 
-export const Route = createFileRoute("/_app/interview")({
+export const Route = createFileRoute("/app/interview")({
   head: () => ({ meta: [{ title: "Mock Interview — MentorAI" }] }),
   component: Interview,
 });

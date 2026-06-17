@@ -3,7 +3,7 @@ import { AppTopbar } from "@/components/app-topbar";
 import { leaderboard, badges } from "@/lib/mock-data";
 import { Flame, Trophy, Zap, TrendingUp, TrendingDown, Minus } from "lucide-react";
 
-export const Route = createFileRoute("/_app/gamification")({
+export const Route = createFileRoute("/app/gamification")({
   head: () => ({ meta: [{ title: "Achievements — MentorAI" }] }),
   component: Gamification,
 });

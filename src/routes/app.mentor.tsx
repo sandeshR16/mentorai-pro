@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Sparkles, Send, Paperclip, FileText, Map, MessageSquare, History } from "lucide-react";
 import { mentorPrompts } from "@/lib/mock-data";
 
-export const Route = createFileRoute("/_app/mentor")({
+export const Route = createFileRoute("/app/mentor")({
   head: () => ({ meta: [{ title: "AI Mentor — MentorAI" }] }),
   component: Mentor,
 });
