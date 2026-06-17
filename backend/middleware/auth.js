@@ -14,6 +14,13 @@ module.exports = (req, res, next) => {
     token = token.slice(7).trim();
   }
 
+  // Accept mock tokens for offline/permissive testing
+  if (token.startsWith("mock_")) {
+    console.log("Mock token detected. Bypassing JWT verification.");
+    req.user = { id: "66708dc2cb4e92bb3c8c7f99" };
+    return next();
+  }
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "mentorai123");
     req.user = decoded;
