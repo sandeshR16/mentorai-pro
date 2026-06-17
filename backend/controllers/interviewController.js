@@ -127,8 +127,55 @@ Evaluate and return exactly a JSON object (no markdown, no backticks, just raw J
   }
 };
 
+function isGibberish(text) {
+  const clean = text.toLowerCase().trim();
+  if (clean.length < 5) return true;
+
+  // Check for keyboard mashing
+  if (clean.includes("asdf") || clean.includes("qwer") || clean.includes("zxcv") || clean.includes("fghj") || clean.includes("hjkl") || clean.includes("sdfg")) {
+    return true;
+  }
+
+  const words = clean.split(/\s+/);
+  if (words.length === 1 && clean.length > 18) {
+    return true;
+  }
+
+  // Count letters
+  let vowels = 0;
+  let consonants = 0;
+  for (let char of clean) {
+    if (/[aeiou]/.test(char)) {
+      vowels++;
+    } else if (/[a-z]/.test(char)) {
+      consonants++;
+    }
+  }
+
+  if (consonants > 5 && vowels === 0) return true;
+  const ratio = vowels / (vowels + consonants || 1);
+  if (consonants > 8 && (ratio < 0.12 || ratio > 0.85)) return true;
+
+  // Repetitive spam checks
+  const uniqueWords = new Set(words);
+  if (words.length > 4 && uniqueWords.size / words.length < 0.35) {
+    return true;
+  }
+
+  return false;
+}
+
 function getMockEvaluation(question, answer) {
-  const answerLength = answer ? answer.trim().length : 0;
+  if (!answer || isGibberish(answer)) {
+    return {
+      score: 1,
+      strengths: "None. The answer appears to be gibberish or spam.",
+      weaknesses: "The input does not form coherent English sentences or relevant professional content.",
+      improvementTips: "Please provide a professional, coherent, and structured answer to the question."
+    };
+  }
+
+  const answerLength = answer.trim().length;
   let score = 5;
   let strengths = "Your response has been registered and verified by our system.";
   let weaknesses = "The explanation is somewhat brief or lacks structured points.";
