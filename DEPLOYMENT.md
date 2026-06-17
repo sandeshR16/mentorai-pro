@@ -56,15 +56,15 @@ graph TD
 
 1. Sign up on [Vercel](https://vercel.com) and import your GitHub repository.
 2. Configure the project settings:
-   - **Framework Preset**: `Vite` (or `Other`)
+   - **Framework Preset**: `TanStack Start` (or `Other`)
    - **Root Directory**: `frontend`
    - **Build Command**: `npm run build`
-   - **Output Directory**: `dist/client` (or default build location)
+   - **Output Directory**: Leave empty/default (do NOT override to `dist` or `dist/client`; Vercel automatically detects the Nitro build output at `.vercel/output`).
 3. Under **Environment Variables**, add:
    - `VITE_API_URL=https://your-backend-render-url.onrender.com/api` (Use the Render URL from Step 2)
    - `VITE_SUPABASE_URL=your_supabase_project_url`
    - `VITE_SUPABASE_ANON_KEY=your_supabase_anon_public_key`
-4. Click **Deploy**. Vercel will build and host your frontend static bundle.
+4. Click **Deploy**. Vercel will build and host your frontend application.
 
 ---
 

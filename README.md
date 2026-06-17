@@ -81,19 +81,21 @@ Deploy your Node.js server to a hosting provider like **Render** or **Railway**:
 
 ---
 
-### 🎨 2. Frontend Deployment (e.g., Vercel, Netlify, Render)
+### 🎨 2. Frontend Deployment (e.g., Vercel)
 
-Deploy the static React/Vite assets to a global CDN like **Vercel** or **Netlify**:
+Deploy the React/Vite/TanStack Start assets and server to Vercel:
 
 1. Log in to [Vercel](https://vercel.com/) and click **Add New** -> **Project**.
 2. Import your GitHub repository.
 3. Configure the following build settings:
-   - **Framework Preset**: `Vite` (or select `Other` if it defaults to Vite).
+   - **Framework Preset**: `TanStack Start` (or select `Other` if it defaults to Vite).
    - **Root Directory**: `frontend`
    - **Build Command**: `npm run build`
-   - **Output Directory**: `dist` (Vite's default build path).
-4. Add the following **Environment Variable**:
+   - **Output Directory**: Leave empty/default (do NOT override to `dist` or `dist/client`; Vercel automatically detects the Nitro build output at `.vercel/output`).
+4. Add the following **Environment Variables**:
    - `VITE_API_URL`: Set this to the URL of your deployed backend followed by `/api` (e.g., `https://mentorai-backend.onrender.com/api`).
+   - `VITE_SUPABASE_URL`: Your Supabase project URL.
+   - `VITE_SUPABASE_ANON_KEY`: Your Supabase anon public API key.
 5. Click **Deploy**. Vercel will bundle your assets and provide a production URL (e.g., `https://mentorai-pro.vercel.app`).
 
 Now your application is fully live, connected, and ready for use!
