@@ -73,11 +73,11 @@ export function Divider() {
   );
 }
 
-export function Field({ label, type = "text", placeholder }: { label: string; type?: string; placeholder?: string }) {
+export function Field({ label, type = "text", placeholder, value, onChange }: { label: string; type?: string; placeholder?: string; value?: string; onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
   return (
     <div className="space-y-1.5">
       <label className="text-xs font-medium text-ink-300">{label}</label>
-      <input type={type} placeholder={placeholder} className="w-full glass-card rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-ink-600 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:border-brand-primary/40 transition-all" />
+      <input type={type} placeholder={placeholder} value={value} onChange={onChange} className="w-full glass-card rounded-lg px-3.5 py-2.5 text-sm text-white placeholder:text-ink-600 focus:outline-none focus:ring-2 focus:ring-brand-primary/40 focus:border-brand-primary/40 transition-all" />
     </div>
   );
 }
